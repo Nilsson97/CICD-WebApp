@@ -10,6 +10,14 @@ on:
   workflow_dispatch:
 
 jobs:
+  test:
+      runs-on: windows-latest
+      steps:
+        - name: Install dependencies
+          run: dotnet restore
+        - name: Execute unit tests
+          run: dotnet test
+
   build:
     runs-on: windows-latest
 
@@ -33,12 +41,6 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
-
-      - name: Install dependencies
-        run: dotnet restore
-      - name: Execute unit tests
-        run: dotnet test
-
 
   deploy:
     runs-on: windows-latest
