@@ -27,6 +27,13 @@ jobs:
       - name: Execute unit tests
         run: dotnet test
 
+      - name: check for vulnerable packages
+        run: |
+          New-item vulnerabilities.txt
+          dotnet list package --vulnerable --include-transitive | Tee-Object vulnerabilities.txt
+          $matches = Get-Content vulnerabilities.txt | Select-String -Pattern "has the following vulnerable packages"
+          if($matches.Length -gt 0){echo 'vulnerable packages detected'; exit 1}
+          
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
